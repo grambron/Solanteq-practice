@@ -13,8 +13,7 @@ public class IssuerBank {
     private String urlString;
     private String bin;
 
-    public IssuerBank() {
-    }
+    public IssuerBank() {}
 
     public IssuerBank(String bin, String url) {
         this.setBin(bin);

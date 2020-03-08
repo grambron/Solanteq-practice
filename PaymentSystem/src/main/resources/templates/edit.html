@@ -3,11 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>Edit bank</title>
+    <script>
+        function fill_inputs() {
+            let dataSource = document.getElementById("banks");
+            let data = dataSource.options[dataSource.selectedIndex].text.split(' ');
+            let binBank = document.getElementById("bin");
+            binBank.value = data[0];
+            let urlBank = document.getElementById("url");
+            urlBank.value = data[2];
+        }
+    </script>
 </head>
 <body>
 <form th:object="${bankToDel}">
     <label for="banks">Existing banks:</label>
-    <select id="banks">
+    <select id="banks", onchange="fill_inputs()">
         <option selected disabled hidden>Choose row to edit</option>
         <option th:each="bankEntry : ${allBanks}"
                 th:value="${bankEntry}"

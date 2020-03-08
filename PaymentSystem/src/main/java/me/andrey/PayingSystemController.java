@@ -18,6 +18,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 //TODO: Add tests
 
@@ -77,7 +78,6 @@ public class PayingSystemController {
         model.addAttribute("bankToAdd", new IssuerBank());
         return "edit";
     }
-
 
     private ResponseEntity<?> sendTransactionToIssuerBan(String urlString, JSONObject body) throws IOException {
         URL url = new URL(urlString);

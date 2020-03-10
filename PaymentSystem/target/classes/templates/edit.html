@@ -4,20 +4,44 @@
     <meta charset="UTF-8">
     <title>Edit bank</title>
     <script>
+        var deleteBankUrl = "";
+        var deleteBankBin = "";
+
         function fill_inputs() {
             let dataSource = document.getElementById("banks");
             let data = dataSource.options[dataSource.selectedIndex].text.split(' ');
             let binBank = document.getElementById("bin");
             binBank.value = data[0];
+            deleteBankBin = data[0];
             let urlBank = document.getElementById("url");
             urlBank.value = data[2];
+            deleteBankUrl = data[2];
         }
+
+        function sendForm() {
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '/edit', true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onload = function () {
+                alert("done: " + xhr.responseText);
+            };
+            let newBin = document.getElementById("bin").value;
+            let newUrl = document.getElementById("url").value;
+            let data = JSON.stringify({
+                "delBin": deleteBankBin,
+                "delUrl": deleteBankUrl,
+                "newBin": newBin,
+                "newUrl": newUrl
+            });
+            xhr.send(data);
+        }
+
     </script>
 </head>
 <body>
 <form th:object="${bankToDel}">
     <label for="banks">Existing banks:</label>
-    <select id="banks", onchange="fill_inputs()">
+    <select id="banks" onchange="fill_inputs()">
         <option selected disabled hidden>Choose row to edit</option>
         <option th:each="bankEntry : ${allBanks}"
                 th:value="${bankEntry}"
@@ -26,13 +50,13 @@
     <input type="submit" value="Select"/>
 </form>
 <br>
-<form action="#" th:action="@{/edit}"
-      th:object="${bankToAdd}" method="post">
-    <label for="bin">BIN:</label><br>
-    <input id="bin" type="text" th:field="*{bin}" th:value="${bankToDel}"/><br>
-    <label for="url">BankURL:</label><br>
-    <input id="url" type="text" th:field="*{urlString}"/><br>
-    <input type="submit" value="Submit"/>
-</form>
+<label for="bin">BIN:</label><br>
+<input id="bin" type="text"/><br>
+<label for="url">BankURL:</label><br>
+<input id="url" type="text"/><br>
+<button id="btnSend" onclick="sendForm()">Send</button>
+<br>
+<label id="status"></label>>
+<br>
 </body>
 </html>

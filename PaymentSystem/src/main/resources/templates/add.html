@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <title>Add new bank</title>
 </head>
-<body>
 <form action="#" th:action="@{/add}"
       th:object="${bank}" method="post">
-    <p>BIN:<input type="text" th:field="*{bin}" /></p>
-    <p>BankURL:<input type="text" th:field="*{urlString}" /></p>
-    <input type="submit" value="Submit" />
+    <p>BIN:<input type="text" th:field="*{bin}"/></p>
+    <p>BankURL:<input type="text" th:field="*{urlString}"/></p>
+    <input type="submit" value="Submit"/>
 </form>
+<br>
+<label id="status"></label>
 </body>
 </html>

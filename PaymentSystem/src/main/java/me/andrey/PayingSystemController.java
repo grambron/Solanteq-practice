@@ -1,6 +1,5 @@
 package me.andrey;
 
-import jdk.nashorn.internal.runtime.logging.Logger;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,7 +59,6 @@ public class PayingSystemController {
         issuerBankRepository.save(new IssuerBank(body.get("newBin"), body.get("newUrl")));
     }
 
-    @Logger
     private void printBanks() {
         List<String> lst = issuerBankRepository.findAll().stream().
                 map(IssuerBank::toCompactString).collect(Collectors.toCollection(ArrayList::new));

@@ -30,7 +30,7 @@ function sendForm() {
         stateField.innerHTML = "Incorrect bin";
         return;
     }
-    if (deleteBankBin.empty() || deleteBankUrl.empty()) {
+    if (deleteBankBin === "" || deleteBankUrl === "") {
         stateField.innerHTML = "Choose bank to edit";
         return;
     }

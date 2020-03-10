@@ -3,40 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Edit bank</title>
-    <script>
-        var deleteBankUrl = "";
-        var deleteBankBin = "";
-
-        function fill_inputs() {
-            let dataSource = document.getElementById("banks");
-            let data = dataSource.options[dataSource.selectedIndex].text.split(' ');
-            let binBank = document.getElementById("bin");
-            binBank.value = data[0];
-            deleteBankBin = data[0];
-            let urlBank = document.getElementById("url");
-            urlBank.value = data[2];
-            deleteBankUrl = data[2];
-        }
-
-        function sendForm() {
-            let xhr = new XMLHttpRequest();
-            xhr.open('POST', '/edit', true);
-            xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.onload = function () {
-
-            };
-            let newBin = document.getElementById("bin").value;
-            let newUrl = document.getElementById("url").value;
-            let data = JSON.stringify({
-                "delBin": deleteBankBin,
-                "delUrl": deleteBankUrl,
-                "newBin": newBin,
-                "newUrl": newUrl
-            });
-            xhr.send(data);
-        }
-
-    </script>
+    <script type="text/javascript" th:src="@{js/edit-scripts.js}"></script>
+    <script type="text/javascript" th:src="@{js/common.js}"></script>
 </head>
 <body>
 <form th:object="${bankToDel}">
@@ -47,7 +15,6 @@
                 th:value="${bankEntry}"
                 th:text="${bankEntry.toCompactString()}"></option>
     </select>
-    <input type="submit" value="Select"/>
 </form>
 <br>
 <label for="bin">BIN:</label><br>
@@ -56,7 +23,8 @@
 <input id="url" type="text"/><br>
 <button id="btnSend" onclick="sendForm()">Send</button>
 <br>
-<label id="status"></label>>
+<label id="status"></label>
 <br>
+<a href="/">back</a>
 </body>
 </html>

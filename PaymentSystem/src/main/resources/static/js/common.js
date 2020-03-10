@@ -7,5 +7,5 @@ function getRequest(tag) {
 
 
 function validate(bin, url) {
-    return bin.length !== 6 || isNaN(parseInt(url));
+    return bin.length !== 6 || isNaN(parseInt(bin));
 }

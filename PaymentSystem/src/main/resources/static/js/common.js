@@ -1,5 +1,3 @@
-
-
 function getRequest(tag) {
     let xhr = new XMLHttpRequest();
     xhr.open('POST', tag, true);
@@ -7,6 +5,7 @@ function getRequest(tag) {
     return xhr;
 }
 
+
 function validate(bin, url) {
-    return !(bin.length !== 5 || isNaN(parseInt(url)));
+    return bin.length !== 6 || isNaN(parseInt(url));
 }

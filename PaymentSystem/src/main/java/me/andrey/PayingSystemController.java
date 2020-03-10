@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class PayingSystemController {
 
 
-    private final int binLength = 5;
+    private final int binLength = 6;
     private final IssuerBankRepository issuerBankRepository;
 
     public PayingSystemController(IssuerBankRepository issuerBankRepository) {

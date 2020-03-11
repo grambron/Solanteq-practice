@@ -3,26 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <title>Edit bank</title>
+    <script type="text/javascript" th:src="@{js/edit-scripts.js}"></script>
+    <script type="text/javascript" th:src="@{js/common.js}"></script>
 </head>
 <body>
 <form th:object="${bankToDel}">
     <label for="banks">Existing banks:</label>
-    <select id="banks">
+    <select id="banks" onchange="fill_inputs()">
         <option selected disabled hidden>Choose row to edit</option>
         <option th:each="bankEntry : ${allBanks}"
                 th:value="${bankEntry}"
                 th:text="${bankEntry.toCompactString()}"></option>
     </select>
-    <input type="submit" value="Select"/>
 </form>
 <br>
-<form action="#" th:action="@{/edit}"
-      th:object="${bankToAdd}" method="post">
-    <label for="bin">BIN:</label><br>
-    <input id="bin" type="text" th:field="*{bin}" th:value="${bankToDel}"/><br>
-    <label for="url">BankURL:</label><br>
-    <input id="url" type="text" th:field="*{urlString}"/><br>
-    <input type="submit" value="Submit"/>
-</form>
+<label for="bin">BIN:</label><br>
+<input id="bin" type="text"/><br>
+<label for="url">BankURL:</label><br>
+<input id="url" type="text"/><br>
+<button id="btnSend" onclick="sendForm()">Send</button>
+<br>
+<label id="status"></label>
+<br>
+<a href="/">back</a>
 </body>
 </html>

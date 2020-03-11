@@ -1,14 +1,12 @@
 package me.andrey;
 
 import org.json.JSONObject;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -16,19 +14,26 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 //TODO: Add tests
 
 @Controller
 public class PayingSystemController {
 
-    final IssuerBankRepository issuerBankRepository;
+
+    private final int binLength = 6;
+    private final IssuerBankRepository issuerBankRepository;
 
     public PayingSystemController(IssuerBankRepository issuerBankRepository) {
         this.issuerBankRepository = issuerBankRepository;
     }
+
+
 
     @PostMapping("/redirect")
     public ResponseEntity<?> redirectTransactionToIssuer(@RequestBody Map<String, String> body) {
@@ -44,19 +49,93 @@ public class PayingSystemController {
     }
 
     //TODO: Add status output in html
-    //TODO: Add redirection to index
     @PostMapping("/add")
-    public void addIssuerBank(@ModelAttribute("bank") IssuerBank bank) {
-        issuerBankRepository.save(bank);
+    public ResponseEntity<String> addIssuerBank(@RequestBody Map<String, String> body) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("response:", "edit-result");
+
+        String newBin = body.get("newBin");
+        String newUrl = body.get("newUrl");
+
+        if (newBin == null || newUrl == null) {
+            return new ResponseEntity<>("Incorrect json", headers, HttpStatus.OK);
+        }
+
+        if (newBin.length() != binLength) {
+            return new ResponseEntity<>("Incorrect data", headers, HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            Integer.parseInt(newBin);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("Incorrect data", headers, HttpStatus.BAD_REQUEST);
+        }
+
+        IssuerBank newBank = new IssuerBank(newBin, newUrl);
+        if (issuerBankRepository.findByBin(newBin) != null) {
+            return new ResponseEntity<>("Bin already exists", headers, HttpStatus.BAD_REQUEST);
+        }
+
+        issuerBankRepository.save(newBank);
+        return new ResponseEntity<>("Done", headers, HttpStatus.OK);
     }
 
     //TODO: Add status output in html
-    //TODO: Add redirection to index
     @PostMapping("/edit")
-    public void editIssuerBank(@ModelAttribute("bankToDel") IssuerBank bankToDel,
-                               @ModelAttribute("bankToAdd") IssuerBank bankToAdd) {
-        issuerBankRepository.delete(bankToDel);
-        issuerBankRepository.save(bankToAdd);
+    public ResponseEntity<String> editIssuerBank(@RequestBody Map<String, String> body) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("response:", "edit-result");
+
+        String deleteBin = body.get("delBin");
+        String newBin = body.get("newBin");
+        String newUrl = body.get("newUrl");
+        if (deleteBin == null || newBin == null || newUrl == null) {
+            return new ResponseEntity<>("Incorrect json", headers, HttpStatus.OK);
+        }
+
+        if (deleteBin.length() != binLength || newBin.length() != binLength) {
+            return new ResponseEntity<>("Incorrect data", headers, HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            Integer.parseInt(deleteBin);
+            Integer.parseInt(newBin);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("Incorrect data", headers, HttpStatus.BAD_REQUEST);
+        }
+
+        IssuerBank bankToDelete;
+        try {
+            bankToDelete = issuerBankRepository.findByBin(deleteBin);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Incorrect database state", headers, HttpStatus.NOT_FOUND);
+        }
+
+        if (bankToDelete == null) {
+            return new ResponseEntity<>("Not found", headers, HttpStatus.NOT_FOUND);
+        }
+
+        try {
+            issuerBankRepository.delete(bankToDelete);
+            if (issuerBankRepository.findByBin(newBin) != null) {
+                issuerBankRepository.save(bankToDelete);
+                return new ResponseEntity<>("Bin already exists", headers, HttpStatus.BAD_REQUEST);
+            }
+            issuerBankRepository.save(new IssuerBank(newBin, newUrl));
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error", headers, HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>("Done", headers, HttpStatus.OK);
+    }
+
+    private void printBanks() {
+        List<String> lst = issuerBankRepository.findAll().stream().
+                map(IssuerBank::toCompactString).collect(Collectors.toCollection(ArrayList::new));
+        for (String data : lst) {
+            System.out.println(data);
+        }
     }
 
     //TODO: Beatify with css
@@ -71,13 +150,18 @@ public class PayingSystemController {
     @GetMapping("/edit")
     public String openDBEditPage(Model model) {
         List<IssuerBank> allBanks = issuerBankRepository.findAll();
-
         model.addAttribute("allBanks", allBanks);
         model.addAttribute("bankToDel", new IssuerBank());
         model.addAttribute("bankToAdd", new IssuerBank());
         return "edit";
     }
 
+    @PostMapping("/rem")
+    public void deleteAll() {
+        for (IssuerBank ib : issuerBankRepository.findAll()) {
+            issuerBankRepository.delete(ib);
+        }
+    }
 
     private ResponseEntity<?> sendTransactionToIssuerBan(String urlString, JSONObject body) throws IOException {
         URL url = new URL(urlString);
@@ -88,12 +172,12 @@ public class PayingSystemController {
         connection.setDoOutput(true);
 
         try (DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
-            wr.write(body.toString().getBytes("utf-8"));
+            wr.write(body.toString().getBytes(StandardCharsets.UTF_8));
             wr.flush();
         }
 
         StringBuilder response = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
             String responseLine;
             while ((responseLine = br.readLine()) != null) {
                 response.append(responseLine.trim());

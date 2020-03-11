@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Add new bank</title>
+    <script type="text/javascript" th:src="@{js/add-scripts.js}"></script>
+    <script type="text/javascript" th:src="@{js/common.js}"></script>
 </head>
-<body>
-<form action="#" th:action="@{/add}"
-      th:object="${bank}" method="post">
-    <p>BIN:<input type="text" th:field="*{bin}" /></p>
-    <p>BankURL:<input type="text" th:field="*{urlString}" /></p>
-    <input type="submit" value="Submit" />
-</form>
+<p>BIN:<input id="bin" type="text"/></p>
+<p>BankURL:<input id="url" type="text"/></p>
+<button id="btnSend" onclick="sendForm()">Send</button>
+<br>
+<label id="status"></label><br>
+<a href="/">back</a>
 </body>
 </html>

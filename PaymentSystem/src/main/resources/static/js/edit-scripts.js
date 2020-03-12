@@ -18,8 +18,7 @@ function sendForm() {
     xhr.onload = function () {
         if (xhr.status === 200) {
             stateField.innerHTML = "Successfully changed (update page)";
-        }
-        else {
+        } else {
             stateField.innerHTML = xhr.responseText;
         }
 
@@ -27,7 +26,7 @@ function sendForm() {
     let newBin = document.getElementById("bin").value;
     let newUrl = document.getElementById("url").value;
     if (validate(newBin, newUrl)) {
-        stateField.innerHTML = "Incorrect bin";
+        stateField.innerHTML = "Incorrect bin or url";
         return;
     }
     if (deleteBankBin === "" || deleteBankUrl === "") {

@@ -1,4 +1,4 @@
-package me.andrey;
+package me.admin;
 
 import org.json.JSONObject;
 import org.springframework.http.HttpHeaders;
@@ -34,13 +34,11 @@ public class PayingSystemController {
     }
 
 
-
     @PostMapping("/redirect")
     public ResponseEntity<?> redirectTransactionToIssuer(@RequestBody Map<String, String> body) {
         String cardNum = body.get("num");
         String bin = Utils.getBinFromCardNum(cardNum);
         String urlString = issuerBankRepository.findByBin(bin).getUrlString();
-
         try {
             return sendTransactionToIssuerBan(urlString, new JSONObject(body));
         } catch (IOException e) {
@@ -80,6 +78,8 @@ public class PayingSystemController {
         return new ResponseEntity<>("Done", headers, HttpStatus.OK);
     }
 
+
+
     //TODO: Add status output in html
     @PostMapping("/edit")
     public ResponseEntity<String> editIssuerBank(@RequestBody Map<String, String> body) {
@@ -98,8 +98,9 @@ public class PayingSystemController {
         }
 
         try {
-            Integer.parseInt(deleteBin);
-            Integer.parseInt(newBin);
+            if (Integer.parseInt(deleteBin) < 0 || Integer.parseInt(newBin) < 0) {
+                return new ResponseEntity<>("Incorrect data", headers, HttpStatus.BAD_REQUEST);
+            }
         } catch (NumberFormatException e) {
             return new ResponseEntity<>("Incorrect data", headers, HttpStatus.BAD_REQUEST);
         }

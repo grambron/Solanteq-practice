@@ -5,12 +5,32 @@
     <title>Add new bank</title>
     <script type="text/javascript" th:src="@{js/add-scripts.js}"></script>
     <script type="text/javascript" th:src="@{js/common.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{css/add-style.css}">
+<!--    <link rel="stylesheet" type="text/css" href="../static/css/add-style.css">-->
 </head>
-<p>BIN:<input id="bin" type="text"/></p>
-<p>BankURL:<input id="url" type="text"/></p>
-<button id="btnSend" onclick="sendForm()">Send</button>
-<br>
-<label id="status"></label><br>
-<a href="/">back</a>
+<body>
+<div class="mainBody">
+    <h1>Add call forwarding</h1>
+    <div class="frame">
+        <table>
+            <tr>
+                <td><label for="bin">BIN:</label></td>
+                <td><input id="bin" type="text"/></td>
+            </tr>
+            <tr>
+                <td><label for="url">BankURL:</label></td>
+                <td><input id="url" type="text"/></td>
+            </tr>
+        </table>
+        <br>
+        <button class="button.buttonSend" id="btnSend" onclick="sendForm()">Send</button>
+        <br>
+        <br>
+        <form action="/">
+            <button class="button.buttonBack" type="submit">Back</button>
+        </form>
+        <label id="status"></label><br>
+    </div>
+</div>
 </body>
 </html>

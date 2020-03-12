@@ -11,7 +11,7 @@ function sendForm() {
     let newBin = document.getElementById("bin").value;
     let newUrl = document.getElementById("url").value;
     if (validate(newBin, newUrl)) {
-        stateField.innerHTML = "Incorrect bin";
+        stateField.innerHTML = "Incorrect bin or url";
         return;
     }
     let data = JSON.stringify({

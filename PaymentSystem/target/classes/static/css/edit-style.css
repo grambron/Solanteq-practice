@@ -1,0 +1,51 @@
+div.mainBody {
+    text-align: center;
+}
+
+.button\.buttonSend {
+    display: inline-block;
+    color: black;
+    font-weight: 700;
+    text-decoration: none;
+    user-select: none;
+    padding: .5em 2em;
+    outline: none;
+    border: 1px solid;
+    border-radius: 2px;
+    transition: 0.2s;
+    width: 200px;
+}
+.button\.buttonSend:hover { background: rgba(255,255,255,.2); }
+.button\.buttonSend:active { background: white; }
+
+.button\.buttonBack {
+    display: inline-block;
+    color: black;
+    font-weight: 700;
+    text-decoration: none;
+    user-select: none;
+    padding: .5em 2em;
+    outline: none;
+    border: 1px solid;
+    border-radius: 2px;
+    transition: 0.2s;
+    width: 200px;
+}
+.button\.buttonBack:hover { background: rgba(255,255,255,.2); }
+.button\.buttonBack:active { background: white; }
+
+
+body {
+    background-color: #b0f3f5;
+}
+
+div.frame {
+    border: 4px double black; /* Параметры границы */
+    background: #f5fab4; /* Цвет фона */
+    padding: 10px;
+    alignment: center;
+    align-content: center;
+    text-align: center;
+    position: center;
+    display: inline-block;
+}

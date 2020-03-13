@@ -1,4 +1,4 @@
-package me.andrey;
+package me.admin;
 
 public class Utils {
     static String getBinFromCardNum(String cardNum) {

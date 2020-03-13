@@ -1,30 +1,49 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Edit bank</title>
     <script type="text/javascript" th:src="@{js/edit-scripts.js}"></script>
     <script type="text/javascript" th:src="@{js/common.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{css/edit-style.css}">
+    <!--    <link rel="stylesheet" type="text/css" href="../static/css/edit-style.css">-->
 </head>
+
 <body>
-<form th:object="${bankToDel}">
-    <label for="banks">Existing banks:</label>
-    <select id="banks" onchange="fill_inputs()">
-        <option selected disabled hidden>Choose row to edit</option>
-        <option th:each="bankEntry : ${allBanks}"
-                th:value="${bankEntry}"
-                th:text="${bankEntry.toCompactString()}"></option>
-    </select>
-</form>
-<br>
-<label for="bin">BIN:</label><br>
-<input id="bin" type="text"/><br>
-<label for="url">BankURL:</label><br>
-<input id="url" type="text"/><br>
-<button id="btnSend" onclick="sendForm()">Send</button>
-<br>
-<label id="status"></label>
-<br>
-<a href="/">back</a>
+    <div class="mainBody">
+        <h1>Edit call forwarding</h1>
+        <div class="frame">
+            <form th:object="${bankToDel}">
+                <label for="banks">Existing banks:</label>
+                <select id="banks" onchange="fill_inputs()">
+                    <option selected disabled hidden>Choose row to edit</option>
+                    <option th:each="bankEntry : ${allBanks}" th:value="${bankEntry}" th:text="${bankEntry.toCompactString()}"></option>
+                </select>
+            </form>
+            <br>
+            <table>
+                <tr>
+                    <td><label for="bin">BIN:</label></td>
+                    <td><input id="bin" type="text" /></td>
+                </tr>
+                <tr>
+                    <td><label for="url">BankURL:</label></td>
+                    <td><input id="url" type="text" /></td>
+                </tr>
+            </table>
+            <br>
+            <button class="button.buttonSend" id="btnSend" onclick="sendForm()">Send</button>
+            <br>
+            <br>
+            <form action="/">
+                <button class="button.buttonBack" type="submit">Back</button>
+            </form>
+            <br>
+            <br>
+            <label id="status"></label>
+        </div>
+    </div>
 </body>
+
 </html>

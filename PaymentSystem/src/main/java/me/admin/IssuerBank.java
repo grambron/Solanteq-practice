@@ -1,4 +1,4 @@
-package me.andrey;
+package me.admin;
 
 import javax.persistence.*;
 

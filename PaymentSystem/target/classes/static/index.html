@@ -3,10 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Hello</title>
+    <link rel="stylesheet" type="text/css" href="css/index-style.css">
 </head>
 <body>
-<img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fcollateraldamage.files.wordpress.com%2F2008%2F10%2Fpenpen.jpg&f=1&nofb=1">
-<a href="/add" style="display: block;width: 40%;border: none;background-color: lightskyblue;color: azure;padding: 14px 28px;font-size: 16px;cursor: pointer;text-align: center;">Add bank</a>
-<a href="/edit" style="display: block;width: 40%;border: none;background-color: lightskyblue;color: azure;padding: 14px 28px;font-size: 16px;cursor: pointer;text-align: center;">Edit bank</a>
+<div class="mainBody">
+
+    <h1>Menu</h1>
+    <div class="frame">
+        <h3><u>Rules:</u><br>
+            (1) Bin length is 6 <br>
+            (2) Equal bins are not allowed<br>
+            (3) Url length is no more then 40<br></h3>
+
+        <form action="/add">
+            <button class="button.buttonMenu" type="submit">Add rule</button>
+        </form>
+        <br>
+        <form action="/edit">
+            <button class="button.buttonMenu" type="submit">Edit rules</button>
+        </form>
+    </div>
+</div>
 </body>
 </html>

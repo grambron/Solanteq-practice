@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 @Controller
 public class PayingSystemController {
 
-
     private final int binLength = 6;
     private final IssuerBankRepository issuerBankRepository;
 
@@ -69,15 +68,14 @@ public class PayingSystemController {
             return new ResponseEntity<>("Incorrect data", headers, HttpStatus.BAD_REQUEST);
         }
 
-        IssuerBank newBank = new IssuerBank(newBin, newUrl);
         if (issuerBankRepository.findByBin(newBin) != null) {
             return new ResponseEntity<>("Bin already exists", headers, HttpStatus.BAD_REQUEST);
         }
 
+        IssuerBank newBank = new IssuerBank(newBin, newUrl);
         issuerBankRepository.save(newBank);
         return new ResponseEntity<>("Done", headers, HttpStatus.OK);
     }
-
 
 
     //TODO: Add status output in html
@@ -132,11 +130,21 @@ public class PayingSystemController {
     }
 
     private void printBanks() {
-        List<String> lst = issuerBankRepository.findAll().stream().
-                map(IssuerBank::toCompactString).collect(Collectors.toCollection(ArrayList::new));
+        List<String> lst = getAllBanksToString();
         for (String data : lst) {
             System.out.println(data);
         }
+    }
+
+    private List<String> getAllBanksToString() {
+        return getAllBanks()
+                .stream()
+                .map(IssuerBank::toCompactString)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public List<IssuerBank> getAllBanks() {
+        return issuerBankRepository.findAll();
     }
 
     //TODO: Beatify with css

@@ -4,3 +4,4 @@ The matching between BIN and the bank is stored in the database management syste
 Interactions between the bank acquirer and the issuing bank are provided through synchronous HTTP Web Services.
 
 Test coverage provided.
+
